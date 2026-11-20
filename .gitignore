@@ -1,0 +1,59 @@
+# ---------------------------------------------------------------------------
+# secrets / local config
+# 변형 파일명까지 넓게 막고, 저장소에 들어가야 하는 예제 파일만 되살린다.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+.envrc
+!.env.example
+env.txt
+
+# 실제 매핑은 config.local.yaml. config.yaml(예제)만 커밋된다.
+config.local.yaml
+config.*.yaml
+!config.yaml
+
+# 자격증명·키 파일
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.jks
+*.keystore
+secrets*
+credentials*
+*token*.txt
+service-account*.json
+
+# 로그·백업 (운영 로그와 state 백업에 비밀이 섞일 수 있다)
+*.log
+*.bak
+state-backup*
+*.sqlite3
+*.db
+
+# ---------------------------------------------------------------------------
+# runtime state (Codex OAuth session, SQLite, snapshots)
+# ---------------------------------------------------------------------------
+state/
+repos/
+
+# macOS
+.DS_Store
+
+# editors
+.idea/
+.vscode/
+
+# python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/

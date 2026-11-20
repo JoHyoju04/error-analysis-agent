@@ -1,0 +1,36 @@
+# Slack App manifest for error-analysis-agent
+#
+# 사용법: https://api.slack.com/apps -> Create New App -> From a manifest
+#         -> 워크스페이스 선택 -> YAML 탭에 이 파일 내용 붙여넣기
+#
+# 공개 채널만 사용하면 groups:history / message.groups 두 줄을 지우세요.
+#
+# 앱 생성 후 수동으로 해야 하는 것 (manifest로는 안 됨):
+#   1. Basic Information -> App-Level Tokens -> Generate Token and Scopes
+#      scope: connections:write  -> xapp-...  -> SLACK_APP_TOKEN
+#   2. OAuth & Permissions -> Install to Workspace
+#      -> Bot User OAuth Token xoxb-...       -> SLACK_BOT_TOKEN
+#   3. 알림 채널에서 /invite @Sentry AI Bot
+#
+# Redirect URL / Token Rotation 은 이 앱에 필요 없습니다 (Socket Mode, 단일 워크스페이스).
+
+display_information:
+  name: Sentry AI Bot
+features:
+  bot_user:
+    display_name: Sentry AI Bot
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - chat:write
+      - channels:history
+      - groups:history
+settings:
+  event_subscriptions:
+    bot_events:
+      - message.channels
+      - message.groups
+  socket_mode_enabled: true
+  org_deploy_enabled: false
+  token_rotation_enabled: false

@@ -1,0 +1,39 @@
+# Sentry 프로젝트 ↔ Git 저장소 매핑.
+# 비밀정보는 넣지 않는다 (토큰은 .env 로만 전달한다).
+#
+# 이 파일은 저장소에 commit 되는 **예제**다. 실제 운영 값은
+#   cp config.yaml config.local.yaml
+# 후 config.local.yaml 에 적는다. config.local.yaml 은 .gitignore 에 있고,
+# compose.yaml 이 그 파일을 컨테이너의 /app/config.yaml 로 마운트한다.
+#
+# repo_dir 는 봇 컨테이너 안의 경로다. compose.yaml 이 ./repos 를
+# /workspace/repos 로 마운트하므로, 호스트의 ./repos/<name> 이
+# 컨테이너의 /workspace/repos/<name> 이 된다.
+#
+# 준비: scripts/prepare-repo.sh <name> <git-url>
+
+projects:
+  my-service:
+    # Sentry Issue 의 프로젝트 slug 와 정확히 일치해야 한다.
+    sentry_project_slug: my-service
+    repo_dir: /workspace/repos/my-service
+    repository_url: git@github.com:my-org/my-service.git
+    default_branch: main
+
+  # 두 번째 프로젝트 예시 (필요한 만큼 추가한다)
+  # another-service:
+  #   sentry_project_slug: another-service
+  #   repo_dir: /workspace/repos/another-service
+  #   repository_url: https://github.com/my-org/another-service.git
+  #   default_branch: main
+
+# 아래 값은 기본값이며, 같은 이름의 환경변수가 있으면 환경변수가 우선한다.
+analysis:
+  max_parallel_jobs: 2 # ANALYSIS_MAX_PARALLEL
+  timeout_seconds: 300 # ANALYSIS_TIMEOUT_SECONDS
+  require_release_revision: true # ANALYSIS_REQUIRE_RELEASE_REVISION
+  max_context_bytes: 30000 # ANALYSIS_MAX_CONTEXT_BYTES
+  snapshot_root: /workspace/snapshots # ANALYSIS_SNAPSHOT_ROOT
+  allow_fetch: true # ANALYSIS_ALLOW_FETCH
+  agents_md_policy: prefer_repo # ANALYSIS_AGENTS_MD_POLICY (prefer_repo | always_template)
+  agents_md_template: /app/prompts/AGENTS.analysis.md # ANALYSIS_AGENTS_MD_TEMPLATE
